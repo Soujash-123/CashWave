@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer Dashboard - Antique Treasures</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Antique Treasures</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('my_orders') }}">My Orders</a>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>Welcome, {{ session['username'] }}</h2>
+        
+        <!-- Search Form -->
+        <form class="mb-4">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Search products...">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
+
+        <!-- Products Grid -->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for product in products %}
+            <div class="col">
+                <div class="card h-100" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#productModal{{ product._id }}">
+                    {% if product.images %}
+                    <div id="carousel-{{ loop.index }}" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            {% for image in product.images %}
+                            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                <img src="{{ image.url }}" class="d-block w-100" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if product.images|length > 1 %}
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ loop.index }}" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ loop.index }}" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        </button>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description }}</p>
+                        <p class="card-text">
+                            <small class="text-muted">Price: ${{ product.price }}</small><br>
+                            <small class="text-muted">Available: {{ product.quantity }}</small><br>
+                            <small class="text-muted">Seller: {{ product.seller }}</small>
+                        </p>
+                        <button class="btn btn-primary">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Modal -->
+            <div class="modal fade" id="productModal{{ product._id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ product.name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div id="modalCarousel{{ product._id }}" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            {% for image in product.images %}
+                                            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                                <img src="{{ image.url }}" class="d-block w-100" alt="{{ product.name }}" style="height: 400px; object-fit: contain;">
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        {% if product.images|length > 1 %}
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#modalCarousel{{ product._id }}" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#modalCarousel{{ product._id }}" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4>Details</h4>
+                                    <p>{{ product.description }}</p>
+                                    <hr>
+                                    <p><strong>Price:</strong> ${{ product.price }}</p>
+                                    <p><strong>Available:</strong> {{ product.quantity }} units</p>
+                                    <p><strong>Seller:</strong> {{ product.seller }}</p>
+                                    <div class="d-flex align-items-center mt-4">
+                                        <input type="number" class="form-control me-2" min="1" max="{{ product.quantity }}" value="1" style="width: 100px;">
+                                        <button class="btn btn-primary flex-grow-1">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="showPayment('{{ product._id }}', '{{ product.name }}')">
+                                Proceed to Pay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="modal fade" id="paymentModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Payment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="alert alert-warning mb-4">
+                        <strong>Demo Version:</strong> This is a demonstration only. Payment processing has not been fully implemented yet.
+                    </div>
+                    <div id="qrcode"></div>
+                    <div class="mt-3">
+                        <h4>Total Amount: ₹<span id="paymentAmount"></span></h4>
+                        <p class="text-muted">Scan the QR code using any UPI app to pay</p>
+                    </div>
+                    <form id="paymentForm" class="mt-4">
+                        <input type="hidden" id="currentProductId" name="product_id">
+                        <input type="hidden" id="currentQuantity" name="quantity">
+                        <div class="mb-3">
+                            <label class="form-label">Upload Payment Receipt Screenshot</label>
+                            <input type="file" class="form-control" name="receipt" accept="image/*" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Submit Payment Receipt</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    async function showPayment(productId, productName) {
+        const quantityInput = document.querySelector(`#productModal${productId} input[type="number"]`);
+        const quantity = quantityInput.value;
+        
+        try {
+            const response = await fetch(`/generate_payment_qr/${productId}/${quantity}`);
+            const data = await response.json();
+            
+            if (data.qr_code) {
+                document.getElementById('qrcode').innerHTML = `<img src="${data.qr_code}" alt="Payment QR Code">`;
+                document.getElementById('paymentAmount').textContent = data.amount;
+                document.getElementById('currentProductId').value = productId;
+                document.getElementById('currentQuantity').value = quantity;  // Add this line
+                
+                const productModal = bootstrap.Modal.getInstance(document.getElementById(`productModal${productId}`));
+                productModal.hide();
+                
+                const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+                paymentModal.show();
+            }
+        } catch (error) {
+            console.error('Error generating payment:', error);
+            alert('Error generating payment QR code');
+        }
+    }
+
+    document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const productId = document.getElementById('currentProductId').value;
+        const quantity = document.getElementById('currentQuantity').value;  // Add this line
+        
+        // Show loading state
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalText = submitButton.innerHTML;
+        submitButton.innerHTML = 'Uploading...';
+        submitButton.disabled = true;
+        
+        try {
+            const response = await fetch(`/submit_payment/${productId}`, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                alert('Payment receipt submitted successfully!');
+                const paymentModal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+                paymentModal.hide();
+                location.reload();
+            } else {
+                alert('Error submitting payment receipt: ' + (data.error || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Error submitting payment:', error);
+            alert('Error submitting payment receipt');
+        } finally {
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+        }
+    });
+
+    // Add image preview for receipt upload
+    document.querySelector('input[name="receipt"]').addEventListener('change', function(e) {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'mt-3';
+                previewDiv.innerHTML = `
+                    <h6>Receipt Preview:</h6>
+                    <img src="${e.target.result}" class="img-fluid mb-2" style="max-height: 200px;">
+                `;
+                
+                // Remove any existing preview
+                const existingPreview = document.querySelector('.receipt-preview');
+                if (existingPreview) {
+                    existingPreview.remove();
+                }
+                
+                previewDiv.classList.add('receipt-preview');
+                this.parentElement.appendChild(previewDiv);
+            }.bind(this);
+            reader.readAsDataURL(file);
+        }
+    });
+    </script>
+</body>
+</html>
