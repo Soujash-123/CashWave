@@ -4,3 +4,4 @@ bcrypt
 gunicorn
 cloudinary
 qrcode
+pillow
