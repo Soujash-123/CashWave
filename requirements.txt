@@ -2,3 +2,4 @@ Flask
 pymongo
 bcrypt
 gunicorn
+cloudinary
