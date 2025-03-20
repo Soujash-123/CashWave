@@ -1,9 +1,4 @@
-
 Flask
 pymongo
 bcrypt
-python-dotenv
-Werkzeug
-bson
-uuid
 gunicorn
