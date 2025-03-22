@@ -1,150 +1,247 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AntiqueTreasures - Buyer Signup</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CashWave - Sign Up</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f7f9fc;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
+        
         .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 350px;
-        }
-        h1 {
-            text-align: center;
-            color: #8B4513;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="text"], input[type="password"], input[type="email"] {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+            max-width: 480px;
+            padding: 20px;
         }
-        button {
-            background-color: #8B4513;
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            color: #0070ba;
+            font-size: 32px;
+            font-weight: 700;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        .card-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .card-header h2 {
+            font-size: 24px;
+            color: #2c2e2f;
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #636669;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #dfe1e5;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #0070ba;
+            outline: none;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #0070ba;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            width: 100%;
+            transition: background-color 0.3s ease;
         }
-        button:hover {
-            background-color: #6B3303;
+        
+        .btn:hover {
+            background-color: #005ea6;
         }
-        .links {
-            text-align: center;
-            margin-top: 15px;
-        }
-        .links a {
-            color: #8B4513;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        .flash-message {
-            background-color: #FFD700;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-        .form-row {
+        
+        .divider {
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+            align-items: center;
+            margin: 25px 0;
         }
         
-        .form-row .form-group {
+        .divider::before, .divider::after {
+            content: "";
             flex: 1;
-            margin-bottom: 0;
+            border-bottom: 1px solid #e8e8e8;
         }
         
-        .vintage-border {
-            border: 1px solid #8B4513;
-            padding: 20px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            background-color: rgba(255, 248, 231, 0.7);
+        .divider span {
+            padding: 0 10px;
+            color: #71767a;
+            font-size: 14px;
         }
         
-        .requirements {
-            font-size: 0.9em;
-            color: #5C3317;
-            font-style: italic;
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 15px;
+            color: #71767a;
+        }
+        
+        .login-link a {
+            color: #0070ba;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .password-info {
+            font-size: 12px;
+            color: #71767a;
             margin-top: 5px;
+        }
+        
+        .alerts {
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>AntiqueTreasures</h1>
-        <h2 style="text-align: center; color: #5C3317; font-family: 'Playfair Display', serif;">Buyer Registration</h2>
-        
-        {% if get_flashed_messages() %}
-        <div class="flash-message">
-            {{ get_flashed_messages()[0] }}
+        <div class="logo">
+            <h1>CashWave</h1>
         </div>
-        {% endif %}
         
-        <form method="POST" action="/signup">
-            <div class="form-row">
+        <div class="card">
+            <div class="card-header">
+                <h2>Create Your Account</h2>
+            </div>
+            
+            <div class="alerts">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            
+            <form action="{{ url_for('signup') }}" method="post">
                 <div class="form-group">
-                    <label for="firstname">First Name:</label>
-                    <input type="text" id="firstname" name="firstname" required>
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
                 </div>
+                
                 <div class="form-group">
-                    <label for="lastname">Last Name:</label>
-                    <input type="text" id="lastname" name="lastname" required>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
                 </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" pattern="[0-9]{10}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="student_id">Enrollment Number</label>
+                    <input type="text" id="student_id" name="student_id" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                    <p class="password-info">Use at least 8 characters with a mix of letters, numbers, and symbols</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn">Create Account</button>
+                </div>
+            </form>
+            
+            <div class="divider">
+                <span>OR</span>
             </div>
             
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-                <div class="requirements">Must be unique, at least 4 characters</div>
+            <div class="login-link">
+                Already have an account? <a href="{{ url_for('login') }}">Log In</a>
             </div>
-            
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <div class="requirements">Minimum 8 characters, include numbers and letters</div>
-            </div>
-            
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
-            </div>
-            
-            <button type="submit">Create Account</button>
-        </form>
-        
-        <div class="links">
-            <a href="/login">Already have an account? Login</a> | 
-            <a href="/signup_seller">Register as Seller</a>
         </div>
     </div>
 </body>
