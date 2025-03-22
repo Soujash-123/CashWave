@@ -1,7 +1,4 @@
-Flask
-pymongo
+Flask 
+pymongo 
 bcrypt
 gunicorn
-cloudinary
-qrcode
-pillow
