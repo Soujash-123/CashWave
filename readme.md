@@ -34,7 +34,7 @@ CashWave is a secure and user-friendly wallet management application built using
 
 1. **Clone the Repository:**
 ```bash
-https://github.com/your-repo-link.git
+git clone https://github.com/Soujash-123/CashWave.git
 ```
 
 2. **Navigate to the Directory:**
