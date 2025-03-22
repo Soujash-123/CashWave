@@ -91,10 +91,5 @@ export SECRET_KEY="your_secret_key"
 
 ---
 
-## ⚡ Contact
-For any issues or support, reach out to:
-- **Email:** support@cashwave.com
-- **GitHub:** [Your GitHub Link](https://github.com/yourusername/cashwave)
 
-Enjoy using CashWave! 💸
 
